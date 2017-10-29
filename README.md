@@ -15,34 +15,41 @@ HTTP/1.1 200
 Content-Type: application/json
 
 {
-"id": 10,
-"name": "shirt",
-"color": "red",
-"price": "$23"
+    "success": true,
+    "data": {
+        "id": 10,
+        "name": "shirt",
+        "color": "red",
+        "price": "$23"
+        }
 }
+
 ```
 2- GET - Get item list - HTTP Response Code: **200**
 ```javascript
 HTTP/1.1 200
-Pagination-Count: 100
-Pagination-Page: 5
-Pagination-Limit: 20
-Content-Type: application/json
 
-[
 {
-"id": 10,
-"name": "shirt",
-"color": "red",
-"price": "$123"
-},
-{
-"id": 11,
-"name": "coat",
-"color": "black",
-"price": "$2300"
+    "success": true,
+
+    "count": 100,
+    "limit": 20,
+    "offset": 30,
+
+    "datas": [{
+        "id": 10,
+        "name": "shirt",
+        "color": "red",
+        "price": "$123"
+        },
+        {
+        "id": 11,
+        "name": "coat",
+        "color": "black",
+        "price": "$2300"
+        }
+    ]
 }
-]
 ```
 
 3- POST - Create a new item - HTTP Response Code: **201**
@@ -52,23 +59,21 @@ Location: /v1/items/12
 Content-Type: application/json
 
 {
-"message": "The item was created successfully"
+    "success": true,
+    "data": {
+        "id": 10,
+        "name": "shirt",
+        "color": "red",
+        "price": "$23"
+    }
 }
 ```
 4- PATCH - Update an item - HTTP Response Code: **200/204**
 
-> If updated entity is to be sent after the update
+> The same response with create a new item
 
 ```javascript
 HTTP/1.1  200
-Content-Type: application/json
-
-{
-"id": 10,
-"name": "shirt",
-"color": "red",
-"price": "$23"
-}
 ```
 
 > If updated entity is not to be sent after the update
@@ -92,7 +97,8 @@ HTTP/1.1  404
 Content-Type: application/json
 
 {
-"message": "The item does not exist"
+    "success": false,
+    "message": "The item does not exist"
 }
 ```
 2- DELETE - HTTP Response Code: **404**
@@ -101,7 +107,8 @@ HTTP/1.1  404
 Content-Type: application/json
 
 {
-"message": "The item does not exist"
+    "success": false,
+    "message": "The item does not exist"
 }
 ```
 3- POST -  HTTP Response Code: **400**
@@ -110,19 +117,20 @@ HTTP/1.1  400
 Content-Type: application/json
 
 {
-"message": "Validation errors in your request", /* skip or optional error message */
-"errors": [
-{
-"message": "Oops! The value is invalid",
-"code": 34,
-"field": "email"
-},
-{
-"message": "Oops! The format is not correct",
-"code": 35,
-"field": "phoneNumber"
-}
-]
+    "success": false,
+    "message": "Validation errors in your request", /* skip or optional error message */
+    "errors": [
+        {
+        "message": "Oops! The value is invalid",
+        "code": 34,
+        "field": "email"
+        },
+        {
+        "message": "Oops! The format is not correct",
+        "code": 35,
+        "field": "phoneNumber"
+        }
+    ]
 }
 ```
 4- PATCH -  HTTP Response Code: **400/404**
@@ -130,23 +138,15 @@ Content-Type: application/json
 HTTP/1.1  400
 Content-Type: application/json
 
-{
-"message": "Validation errors in your request", /* skip or optional error message */
-"errors": [
-{
-"message": "Oops! The format is not correct",
-"code": 35,
-"field": "phoneNumber"
-}
-]
-}
+// THE SAME WITH POST
 
 
 HTTP/1.1  404
 Content-Type: application/json
 
 {
-"message": "The item does not exist"
+    "success" : false,
+    "message": "The item does not exist"
 }
 ```
 5- VERB Unauthorized - HTTP Response Code: **401**
@@ -155,7 +155,8 @@ HTTP/1.1  401
 Content-Type: application/json
 
 {
-"message": "Authentication credentials were missing or incorrect"
+    "success" : false,
+    "message": "Authentication credentials were missing or incorrect"
 }
 ```
 6- VERB Forbidden - HTTP Response Code: **403**
@@ -164,7 +165,8 @@ HTTP/1.1  403
 Content-Type: application/json
 
 {
-"message": "The request is understood, but it has been refused or access is not allowed"
+    "success" : false,
+    "message": "The request is understood, but it has been refused or access is not allowed"
 }
 ```
 7- VERB Conflict - HTTP Response Code: **409**
@@ -173,7 +175,8 @@ HTTP/1.1  409
 Content-Type: application/json
 
 {
-"message": "Any message which should help the user to resolve the conflict"
+    "success" : false,
+    "message": "Any message which should help the user to resolve the conflict"
 }
 ```
 8- VERB Too Many Requests - HTTP Response Code: **429**
@@ -182,7 +185,8 @@ HTTP/1.1  429
 Content-Type: application/json
 
 {
-"message": "The request cannot be served due to the rate limit having been exhausted for the resource"
+    "success" : false,
+    "message": "The request cannot be served due to the rate limit having been exhausted for the resource"
 }
 ```
 9- VERB Internal Server Error - HTTP Response Code: **500**
@@ -191,7 +195,8 @@ HTTP/1.1  500
 Content-Type: application/json
 
 {
-"message": "Something is broken"
+    "success" : false,
+    "message": "Something is broken"
 }
 ```
 10- VERB Service Unavailable - HTTP Response Code: **503**
@@ -200,7 +205,8 @@ HTTP/1.1  503
 Content-Type: application/json
 
 {
-"message": "The server is up, but overloaded with requests. Try again later!"
+    "success" : false,
+    "message": "The server is up, but overloaded with requests. Try again later!"
 }
 ```
 ## Validation Error Formats
@@ -212,37 +218,20 @@ HTTP/1.1  400
 Content-Type: application/json
 
 {
-"message": "Validation errors in your request", /* skip or optional error message */
-"errors": {
-"email": [
-"Oops! The email is invalid"
-],
-"phoneNumber": [
-"Oops! The phone number format is not correct"
-]
-}
-}
-```
-```javascript
-HTTP/1.1  400
-Content-Type: application/json
-
-{
-"message": "Validation errors in your request", /* skip or optional error message */
-"errors": {
-"email": [
-{
-"message": "Oops! The email is invalid",
-"code": 35
-}
-],
-"phoneNumber": [
-{
-"message": "Oops! The phone number format is not correct",
-"code": 36
-}
-]
-}
+    "success": false,
+    "message": "Validation errors in your request", /* skip or optional error message */
+    "errors": [
+        {
+        "message": "Oops! The value is invalid",
+        "code": 34,
+        "field": "email"
+        },
+        {
+        "message": "Oops! The format is not correct",
+        "code": 35,
+        "field": "phoneNumber"
+        }
+    ]
 }
 ```
 
