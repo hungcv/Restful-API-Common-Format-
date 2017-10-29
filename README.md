@@ -213,7 +213,7 @@ Content-Type: application/json
 
 Validation error formats can be different depending on your requirements. Following are some other popular formats, other than the one used above.
 
-```javascript
+```json
 HTTP/1.1  400
 Content-Type: application/json
 
