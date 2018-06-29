@@ -1,0 +1,12 @@
+{
+  "messages": [
+    {
+      "attachment": {
+        "type": "image",
+        "payload": {
+          "url": "http://res.cloudinary.com/bms112233/image/upload/co_red,g_center,l_text:Arial_30:Thùy Dung,x_0,y_0/tuyet-chieu-chinh-phuc-me-chong_m"
+        }
+      }
+    }
+  ]
+}
